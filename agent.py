@@ -9,7 +9,7 @@ dt           = 0.1     # time step
 a            = 10      # agent is visible to other agent in time a
 L            = 2000    # Size of box
 N            = 26
-num_agents   = 3
+num_agents   = 5
 
 # Deal with NaN bugs
 np.seterr(divide='ignore', invalid='ignore')
@@ -24,13 +24,20 @@ class Agent:
         self.change_x = 0
         self.change_y = 0
 
-        self.connections = None
+        self.connections = []
 
     def find_connections(self, agents):
-        num_of_connection_agent = random.randint(0,(num_agents - 1))   
+        # List of agents that are not self and are not connections already
+        foreigners = [other_agent for other_agent in agents if other_agent is not self and other_agent not in self.connections]
+        # How many agents I want to be connected with, minus those I'm already connection with
+        num_of_connection = (round(random.randint(1, len(foreigners)), 0) ) - len(self.connections)
+        
+        self.connections = [random.choice(foreigners) for _ in range(num_of_connection)]
 
-        # Find random function that picks a random item in a list and use it in this list comprehension
-        self.connections = [random.choice(agents) for _ in range(num_of_connection_agent)]
+        for agent in self.connections:
+            if self not in agent.connections:
+                agent.connections.append(self) 
+        
     
     def find_distances(self, agents):
         self.find_connections(agents)

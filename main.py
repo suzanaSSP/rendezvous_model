@@ -18,11 +18,11 @@ stubborn_agent = Agent(10, 5)
 fig, ax = plt.subplots()
 for i in range(Nt):
 
-    x = [agent.x % L for agent in agents]
-    y = [agent.y % L for agent in agents]
+    x = [agent.x for agent in agents]
+    y = [agent.y for agent in agents]
 
     for agent in agents:
-        agent.move_with_stubborn_agent(stubborn_agent)
+        agent.find_distances(agents)
 
     if plotRealTime or (i == Nt-1):
         plt.cla()
